@@ -1,0 +1,6 @@
+framework module Pods_Mandiri_iOS_News {
+  umbrella header "Pods-Mandiri-iOS-News-umbrella.h"
+
+  export *
+  module * { export * }
+}
