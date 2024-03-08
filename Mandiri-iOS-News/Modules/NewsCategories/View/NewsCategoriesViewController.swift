@@ -12,7 +12,6 @@ class NewsCategoriesViewController: UIViewController, NewsCategoriesViewProtocol
     var spinner = UIActivityIndicatorView()
     var presenter: NewsCategoriesPresenterProtocol?
     var categories: [NewsSourceModel] = []
-    var newsResponse: NewsSourceResponse?
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -53,14 +52,9 @@ class NewsCategoriesViewController: UIViewController, NewsCategoriesViewProtocol
     
     
 
-    func update(with newsResponse: NewsSourceResponse) {
+    func update(with newsCategories: [NewsSourceModel]) {
         DispatchQueue.main.async { [weak self] in
-            self?.newsResponse = newsResponse
-            let uniqueCategoryId = Set(newsResponse.sources.compactMap({$0.category}))
-            let uniqueCategories = uniqueCategoryId.compactMap { category in
-                newsResponse.sources.first(where: {$0.category == category})
-            }.sorted(by: {$0.category < $1.category})
-            self?.categories = uniqueCategories
+            self?.categories = newsCategories
             self?.tableView.reloadData()
             self?.tableView.isHidden = false
             self?.spinner.stopAnimating()
@@ -93,8 +87,7 @@ extension NewsCategoriesViewController: UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let newsResponse else { return }
-        presenter?.showNewsSource(newsResponse, category: categories[indexPath.row].category)
+        presenter?.showNewsSource(category: categories[indexPath.row].category)
     }
 }
 

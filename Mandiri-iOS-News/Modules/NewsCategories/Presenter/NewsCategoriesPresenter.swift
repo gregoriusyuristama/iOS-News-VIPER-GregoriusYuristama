@@ -8,7 +8,7 @@
 import Foundation
 
 class NewsCategoriesPresenter: NewsCategoriesPresenterProtocol {
-
+    
     var router:  NewsCategoriesRouterProtocol?
     var interactor:  NewsCategoriesInteractorProtocol? {
         didSet {
@@ -18,7 +18,7 @@ class NewsCategoriesPresenter: NewsCategoriesPresenterProtocol {
     var view: NewsCategoriesViewProtocol?
     
     
-    func interactorDidFetchCategories(with result: Result<NewsSourceResponse, any Error>) {
+    func interactorDidFetchCategories(with result: Result<[NewsSourceModel], any Error>) {
         switch result {
         case .success(let response):
             view?.update(with: response)
@@ -27,8 +27,9 @@ class NewsCategoriesPresenter: NewsCategoriesPresenterProtocol {
         }
     }
     
-    func showNewsSource(_ newsResponse: NewsSourceResponse, category: String) {
-        guard let view = view else { return }
+    
+    func showNewsSource(category: String) {
+        guard let view = view, let newsResponse = interactor?.newsResponse else { return }
         router?.presentNewsSource(from: view, for: newsResponse, category: category)
     }
     

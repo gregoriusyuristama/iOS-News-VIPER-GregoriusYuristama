@@ -26,6 +26,7 @@ class NewsArticleRouter: NewsArticleRouterProtocol {
         presenter.router = router
         presenter.view = view
         presenter.interactor = interactor
+        presenter.isPaginationAvailable = true
         
         guard let viewController = view as? UIViewController else { fatalError("Invalid View Protocol Type") }
         

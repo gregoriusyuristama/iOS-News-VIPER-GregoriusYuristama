@@ -30,22 +30,13 @@ class NewsAPI {
         }
     }
     
-    func getNewsArticleWithCategoryAndSource(with category: String, and sourceId: String, completion: @escaping (Result<NewsArticleResponse, Error>) -> Void) {
-        let newsSourceURL = APIConstant.baseApiURL+APIConstant.getNewsSourceWithCategory+category+"&sources.id="+sourceId
-            
-        AF.request(newsSourceURL, method: .get, headers: self.newsAPIHeaders).responseDecodable(of: NewsArticleResponse.self) { response in
-            switch response.result {
-            case .success(let success):
-                completion(.success(success))
-            case .failure(let failure):
-                completion(.failure(failure))
-            }
-        }
-    }
-    
-    func getMoreNewsArticleWithCategoryAndSource(with category: String, and sourceId: String, pages: Int, completion: @escaping (Result<NewsArticleResponse, Error>) -> Void) {
+    func getMoreNewsArticleWithCategoryAndSource(with category: String, and sourceId: String, pages: Int? = nil, completion: @escaping (Result<NewsArticleResponse, Error>) -> Void) {
         
-        let newsSourceURL = "\(APIConstant.baseApiURL)\(APIConstant.getNewsSourceWithCategory)\(category)&sources.id=\(sourceId)&page=\(pages)"
+        var newsSourceURL = "\(APIConstant.baseApiURL)\(APIConstant.getNewsSourceWithCategory)\(category)&sources.id=\(sourceId)"
+        
+        if let pages {
+            newsSourceURL += "&page=\(pages)"
+        }
             
         AF.request(newsSourceURL, method: .get, headers: self.newsAPIHeaders).responseDecodable(of: NewsArticleResponse.self) { response in
             switch response.result {

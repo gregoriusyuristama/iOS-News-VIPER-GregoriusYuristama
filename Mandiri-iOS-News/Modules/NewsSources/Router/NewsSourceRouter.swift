@@ -22,6 +22,7 @@ class NewsSourceRouter: NewsSourceRouterProtocol {
         interactor.presenter = presenter
         interactor.newsResponse = newsResponse
         interactor.category = category
+        interactor.fetchedNewsCount = 0
         
         presenter.router = router
         presenter.view = view

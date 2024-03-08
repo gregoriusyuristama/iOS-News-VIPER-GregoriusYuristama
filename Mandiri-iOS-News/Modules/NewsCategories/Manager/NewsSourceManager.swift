@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NewsSourceManager: NewsSourceManagerInputProtocol {
+class NewsSourceManager: NewsSourceManagerProtocol {
     
     func getNewsSources(completion: @escaping (NewsSourceResponse? , Error?) -> ()) {
         NewsAPI.shared.getNewsSources { result in

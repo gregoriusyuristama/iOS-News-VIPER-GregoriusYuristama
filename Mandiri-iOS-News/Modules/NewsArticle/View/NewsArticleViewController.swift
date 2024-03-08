@@ -13,8 +13,7 @@ class NewsArticleViewController: UIViewController, NewsArticleViewProtocol {
     var spinner = UIActivityIndicatorView()
     var searchController = UISearchController(searchResultsController: nil)
     
-    lazy var newsArticles: [NewsArticleModel] = []
-    private var displayedNewsArticle: [NewsArticleModel] = []
+    var newsArticles: [NewsArticleModel] = []
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -33,26 +32,26 @@ class NewsArticleViewController: UIViewController, NewsArticleViewProtocol {
     
     
     func update(with newsArticles: [NewsArticleModel], isPagination: Bool) {
-        if isPagination {
-            DispatchQueue.main.async { [weak self] in
+        
+        DispatchQueue.main.async { [weak self] in
+            if isPagination {
                 self?.newsArticles.append(contentsOf: newsArticles)
-                self?.displayedNewsArticle.append(contentsOf: newsArticles)
-                self?.tableView.reloadData()
                 self?.tableView.finishInfiniteScroll()
-            }
-            
-        } else {
-            DispatchQueue.main.async { [weak self] in
+                if let isPaginationAvailable = self?.presenter?.isPaginationAvailable, !isPaginationAvailable {
+                    self?.tableView.removeInfiniteScroll()
+                }
+            } else {
                 self?.newsArticles = newsArticles
-                self?.displayedNewsArticle = newsArticles
-                self?.tableView.isHidden = false
-                self?.tableView.reloadData()
-                self?.spinner.stopAnimating()
                 
-                self?.tableView.addInfiniteScroll(handler: { [weak self] table in
-                    self?.presenter?.loadMoreData()
-                })
+                if let isPaginationAvailable = self?.presenter?.isPaginationAvailable, isPaginationAvailable {
+                    self?.tableView.addInfiniteScroll(handler: { table in
+                        self?.presenter?.loadMoreData()
+                    })
+                }
             }
+            self?.tableView.isHidden = false
+            self?.tableView.reloadData()
+            self?.spinner.stopAnimating()
         }
     }
     
@@ -74,13 +73,13 @@ class NewsArticleViewController: UIViewController, NewsArticleViewProtocol {
     
     deinit {
         self.newsArticles = []
-        self.displayedNewsArticle = []
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
+        view.addSubview(label)
         tableView.delegate = self
         tableView.dataSource = self
         searchController.searchResultsUpdater = self
@@ -88,7 +87,7 @@ class NewsArticleViewController: UIViewController, NewsArticleViewProtocol {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.startAnimating()
         view.addSubview(spinner)
-
+        
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
@@ -98,6 +97,8 @@ class NewsArticleViewController: UIViewController, NewsArticleViewProtocol {
         tableView.frame = view.bounds
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search News Article"
+        label.frame = view.bounds
+        label.center = view.center
     }
     
 }
@@ -122,15 +123,7 @@ extension NewsArticleViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         DispatchQueue.main.async { [weak self] in
             if let searchText = searchController.searchBar.text {
-                if !searchText.isEmpty {
-                    guard let displayedArticleFiltered = self?.displayedNewsArticle.filter({$0.title.localizedStandardContains(searchText)}) else { return }
-                    self?.newsArticles = displayedArticleFiltered
-                    self?.tableView.reloadData()
-                } else {
-                    guard let displayedArtcile = self?.displayedNewsArticle else { return }
-                    self?.newsArticles = displayedArtcile
-                    self?.tableView.reloadData()
-                }
+                self?.presenter?.searchNewsArticle(searchText)
             }
         }
     }

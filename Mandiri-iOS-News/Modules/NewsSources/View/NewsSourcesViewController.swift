@@ -16,8 +16,6 @@ class NewsSourcesViewController: UIViewController, NewsSourceViewProtocol {
     var searchController = UISearchController(searchResultsController: nil)
 
     var newsSources: [NewsSourceModel] = []
-    private var fetchedNewsSource: [NewsSourceModel] = []
-    private var displayedNewsSource: [NewsSourceModel] = []
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -34,20 +32,33 @@ class NewsSourcesViewController: UIViewController, NewsSourceViewProtocol {
         return label
     }()
     
-    func update(with newsSources: [NewsSourceModel]) {
+    func update(with newsSources: [NewsSourceModel], isPagination: Bool) {
         DispatchQueue.main.async { [weak self] in
-            self?.fetchedNewsSource = newsSources
-            self?.sliceNewsSource(fetchedNewsSource: newsSources)
+            if isPagination {
+                self?.newsSources.append(contentsOf: newsSources)
+                self?.tableView.finishInfiniteScroll()
+                if let isPaginationAvailable = self?.presenter?.isPaginationAvailable, !isPaginationAvailable {
+                    self?.tableView.removeInfiniteScroll()
+                }
+            } else {
+                self?.newsSources = newsSources
+                if let isPaginationAvailable = self?.presenter?.isPaginationAvailable, isPaginationAvailable {
+                    self?.tableView.addInfiniteScroll(handler: { table in
+                        self?.presenter?.loadMoreNewsSource()
+                    })
+                }
+            }
             self?.tableView.isHidden = false
             self?.tableView.reloadData()
             self?.spinner.stopAnimating()
         }
     }
+
+    
     
     func update(with error: any Error) {
         DispatchQueue.main.async { [weak self] in
             self?.newsSources = []
-            self?.fetchedNewsSource = []
             self?.tableView.isHidden = true
             self?.label.text = error.localizedDescription
             self?.label.isHidden = false
@@ -86,41 +97,6 @@ class NewsSourcesViewController: UIViewController, NewsSourceViewProtocol {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search News Sources"
     }
-    
-    private func sliceNewsSource(fetchedNewsSource: [NewsSourceModel]) {
-        if fetchedNewsSource.count > 20 {
-            self.newsSources = Array(fetchedNewsSource[...20])
-            tableView.addInfiniteScroll { [weak self] table in
-                
-                guard self?.newsSources.count != fetchedNewsSource.count else {
-                    self?.tableView.removeInfiniteScroll()
-                    return
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self?.fetchMoreNewsSource(table: table)
-                }
-            }
-        } else {
-            self.newsSources = fetchedNewsSource
-        }
-        self.displayedNewsSource = self.newsSources
-    }
-    
-    private func fetchMoreNewsSource(table: UITableView) {
-        let count = self.newsSources.count
-        var lastIndex = 0
-        if count+20 > fetchedNewsSource.count - 1 {
-            lastIndex = fetchedNewsSource.count - 1
-        } else {
-            lastIndex = count + 20
-        }
-        let slicedFetchedNewsSource = Array(fetchedNewsSource[count...lastIndex])
-        
-        self.newsSources.append(contentsOf: slicedFetchedNewsSource)
-        self.tableView.reloadData()
-        table.finishInfiniteScroll()
-    }
 
 }
 
@@ -149,15 +125,7 @@ extension NewsSourcesViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         DispatchQueue.main.async { [weak self] in
             if let searchText = searchController.searchBar.text {
-                if !searchText.isEmpty {
-                    guard let newsSourceFiltered = self?.newsSources.filter({$0.name.localizedStandardContains(searchText)}) else { return }
-                    self?.newsSources = newsSourceFiltered
-                    self?.tableView.reloadData()
-                } else {
-                    guard let displayedNewsSource = self?.displayedNewsSource else { return }
-                    self?.newsSources = displayedNewsSource
-                    self?.tableView.reloadData()
-                }
+                self?.presenter?.searchNews(searchText)
             }
         }
     }

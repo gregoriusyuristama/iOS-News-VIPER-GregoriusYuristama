@@ -19,9 +19,7 @@ protocol NewsArticleInteractorProtocol {
 }
 
 protocol NewsArticleManagerProtocol {
-    func getNewsArticles(category: String, sourceId: String, completion: @escaping (NewsArticleResponse?, Error?) -> ())
-    
-    func getMoreNewsArticle(category: String, sourceId: String, pages: Int, completion: @escaping (NewsArticleResponse?, Error?) -> ())
+    func getNewsArticles(category: String, sourceId: String, pages: Int?, completion: @escaping (NewsArticleResponse?, Error?) -> ())
 }
 
 protocol NewsArticlePresenterProtocol {
@@ -29,11 +27,15 @@ protocol NewsArticlePresenterProtocol {
     var interactor: NewsArticleInteractorProtocol? { get set }
     var view: NewsArticleViewProtocol? { get set }
     
-    func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], Error>)
-    func interactorDidFetchMoreNewsArticle(with result: Result<[NewsArticleModel], Error>)
+    var fetchedNewsArticle: [NewsArticleModel]? { get set }
+    var isPaginationAvailable: Bool? { get set }
+    
+    func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], Error>, isPagination: Bool, isPaginationAvailable: Bool)
     func showNewsWebView(news: NewsArticleModel)
     
     func loadMoreData()
+    
+    func searchNewsArticle(_ searchText: String)
 }
 
 protocol NewsArticleViewProtocol {

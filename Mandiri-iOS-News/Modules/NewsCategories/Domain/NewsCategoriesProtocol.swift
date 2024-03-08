@@ -12,7 +12,7 @@ typealias EntryPoint = UINavigationController
 
 protocol NewsCategoriesInteractorProtocol {
     var presenter: NewsCategoriesPresenterProtocol? { get set }
-    
+    var newsResponse: NewsSourceResponse? { get set }
     
     func getCategories()
 }
@@ -23,15 +23,15 @@ protocol NewsCategoriesPresenterProtocol {
     var interactor: NewsCategoriesInteractorProtocol? { get set }
     var view: NewsCategoriesViewProtocol? { get set }
     
-    func interactorDidFetchCategories(with result: Result<NewsSourceResponse, Error>)
-    func showNewsSource(_ newsResponse: NewsSourceResponse, category: String)
+    func interactorDidFetchCategories(with result: Result<[NewsSourceModel], Error>)
+    func showNewsSource(category: String)
 }
 
 
 protocol NewsCategoriesViewProtocol {
     var presenter: NewsCategoriesPresenterProtocol? { get set }
     
-    func update(with newsResponse: NewsSourceResponse)
+    func update(with newsCategories: [NewsSourceModel])
     func update(with error: Error)
 }
 
@@ -44,6 +44,6 @@ protocol NewsCategoriesRouterProtocol {
     func presentNewsSource(from view: NewsCategoriesViewProtocol, for newsResponse: NewsSourceResponse, category: String)
 }
 
-protocol NewsSourceManagerInputProtocol {
+protocol NewsSourceManagerProtocol {
     func getNewsSources(completion: @escaping (NewsSourceResponse? , Error?) -> ())
 }

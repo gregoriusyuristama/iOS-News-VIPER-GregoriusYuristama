@@ -8,6 +8,10 @@
 import Foundation
 
 class NewsArticlePresenter: NewsArticlePresenterProtocol {
+    var fetchedNewsArticle: [NewsArticleModel]?
+    
+    var isPaginationAvailable: Bool?
+
     var router: NewsArticleRouterProtocol?
     
     var interactor: NewsArticleInteractorProtocol? {
@@ -18,19 +22,15 @@ class NewsArticlePresenter: NewsArticlePresenterProtocol {
     
     var view: NewsArticleViewProtocol?
     
-    func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], any Error>) {
-        switch result {
-        case .success(let response):
-            view?.update(with: response, isPagination: false)
-        case .failure(let failure):
-            view?.update(with: failure)
-        }
-    }
-    
-    func interactorDidFetchMoreNewsArticle(with result: Result<[NewsArticleModel], any Error>) {
+    func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], any Error>, isPagination: Bool, isPaginationAvailable: Bool) {
         switch result {
         case .success(let success):
-            view?.update(with: success, isPagination: true)
+            if isPagination {
+                self.fetchedNewsArticle?.append(contentsOf: success)
+            } else {
+                self.fetchedNewsArticle = success
+            }
+            view?.update(with: success, isPagination: isPagination)
         case .failure(let failure):
             view?.update(with: failure)
         }
@@ -38,11 +38,21 @@ class NewsArticlePresenter: NewsArticlePresenterProtocol {
     
     func showNewsWebView(news: NewsArticleModel) {
         guard let view = view else { return }
-        
         router?.presentNewsArticleWebView(from: view, for: news)
     }
     
     func loadMoreData() {
         interactor?.loadMoreNewsArticles()
     }
+    
+    func searchNewsArticle(_ searchText: String) {
+        if !searchText.isEmpty {
+            guard let searchedNews = fetchedNewsArticle?.filter( {$0.title.localizedCaseInsensitiveContains(searchText)}) else { return }
+            view?.update(with: searchedNews, isPagination: false)
+        } else {
+            guard let fetchedNewsSource = fetchedNewsArticle else { return }
+            view?.update(with: fetchedNewsSource, isPagination: false)
+        }
+    }
+    
 }

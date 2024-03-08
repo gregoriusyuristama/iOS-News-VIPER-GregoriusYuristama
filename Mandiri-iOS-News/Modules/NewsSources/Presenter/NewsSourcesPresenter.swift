@@ -8,7 +8,8 @@
 import Foundation
 
 class NewsSourcesPresenter: NewsSourcesPresenterProtocol {
-    
+    var isPaginationAvailable: Bool?
+    var fetchedNewsSource: [NewsSourceModel]?
     var router: NewsSourceRouterProtocol?
     var interactor: NewsSourceInteractorProtocol? {
         didSet {
@@ -17,10 +18,16 @@ class NewsSourcesPresenter: NewsSourcesPresenterProtocol {
     }
     var view: NewsSourceViewProtocol?
     
-    func interactorDidFetchNewsSources(with result: Result<[NewsSourceModel], any Error>) {
+    func interactorDidFetchNewsSources(with result: Result<[NewsSourceModel], any Error>, isPagination: Bool, isPaginationAvailable: Bool) {
+        self.isPaginationAvailable = isPaginationAvailable
         switch result {
         case .success(let articles):
-            view?.update(with: articles)
+            if !isPagination {
+                self.fetchedNewsSource = articles
+            } else {
+                self.fetchedNewsSource?.append(contentsOf: articles)
+            }
+            view?.update(with: articles, isPagination: isPagination)
         case .failure(let failure):
             view?.update(with: failure)
         }
@@ -31,6 +38,18 @@ class NewsSourcesPresenter: NewsSourcesPresenterProtocol {
         router?.presentNewsArticles(from: view, for: source, and: category)
     }
     
+    func searchNews(_ searchText: String) {
+        if !searchText.isEmpty {
+            guard let searchedNews = fetchedNewsSource?.filter( {$0.name.localizedCaseInsensitiveContains(searchText)}) else { return }
+            view?.update(with: searchedNews, isPagination: false)
+        } else {
+            guard let fetchedNewsSource = fetchedNewsSource else { return }
+            view?.update(with: fetchedNewsSource, isPagination: false)
+        }
+    }
     
+    func loadMoreNewsSource() {
+        interactor?.getMoreNewsSource()
+    }
     
 }

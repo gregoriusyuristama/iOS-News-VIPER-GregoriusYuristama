@@ -25,24 +25,24 @@ class NewsArticleInteractor: NewsArticleInteractorProtocol {
         guard let newsSource = newsSource, let newsCategory = newsCategory else { return }
         
         manager.getNewsArticles(category: newsCategory, sourceId: newsSource.id) { newsArticleResponse, error in
-            if let newsArticleResponse = newsArticleResponse {
-                self.presenter?.interactorDidFetchNewsArticles(with: .success(newsArticleResponse.articles))
+            if let newsArticleResponse = newsArticleResponse{
+                self.presenter?.interactorDidFetchNewsArticles(with: .success(newsArticleResponse.articles), isPagination: false, isPaginationAvailable: ( newsArticleResponse.articles.count < newsArticleResponse.totalResults ))
             } else {
-                self.presenter?.interactorDidFetchNewsArticles(with: .failure(error!))
+                self.presenter?.interactorDidFetchNewsArticles(with: .failure(error!), isPagination: false, isPaginationAvailable: false)
             }
         }
     }
     
     func loadMoreNewsArticles() {
-        guard let newsSource = newsSource, let newsCategory = newsCategory else { return }
+        guard let newsSource = newsSource, let newsCategory = newsCategory, let fetchedNewsArticle = presenter?.fetchedNewsArticle else { return }
         
         pages += 1
         
-        manager.getMoreNewsArticle(category: newsCategory, sourceId: newsSource.id, pages: self.pages) { newsArticleResponse, error in
+        manager.getNewsArticles(category: newsCategory, sourceId: newsSource.id, pages: self.pages) { newsArticleResponse, error in
             if let newsArticleResponse = newsArticleResponse {
-                self.presenter?.interactorDidFetchMoreNewsArticle(with: .success(newsArticleResponse.articles))
+                self.presenter?.interactorDidFetchNewsArticles(with: .success(newsArticleResponse.articles), isPagination: true, isPaginationAvailable: ( fetchedNewsArticle.count < newsArticleResponse.totalResults ))
             } else {
-                self.presenter?.interactorDidFetchMoreNewsArticle(with: .failure(error!))
+                self.presenter?.interactorDidFetchNewsArticles(with: .failure(error!), isPagination: false, isPaginationAvailable: false)
             }
         }
     }

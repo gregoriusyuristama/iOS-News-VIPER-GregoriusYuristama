@@ -8,9 +8,9 @@
 import Foundation
 
 class NewsArticleManager: NewsArticleManagerProtocol {
-    
+
     func getNewsArticles(category: String, sourceId: String, completion: @escaping (NewsArticleResponse?, (any Error)?) -> ()) {
-        NewsAPI.shared.getNewsArticleWithCategoryAndSource(with: category, and: sourceId) { result in
+        NewsAPI.shared.getMoreNewsArticleWithCategoryAndSource(with: category, and: sourceId, pages: nil) { result in
             switch result {
             case .success(let success):
                 completion(success, nil)
@@ -20,7 +20,7 @@ class NewsArticleManager: NewsArticleManagerProtocol {
         }
     }
     
-    func getMoreNewsArticle(category: String, sourceId: String, pages: Int, completion: @escaping (NewsArticleResponse?, (any Error)?) -> ()) {
+    func getNewsArticles(category: String, sourceId: String, pages: Int?, completion: @escaping (NewsArticleResponse?, (any Error)?) -> ()) {
         NewsAPI.shared.getMoreNewsArticleWithCategoryAndSource(with: category, and: sourceId, pages: pages) { result in
             switch result {
             case .success(let success):
