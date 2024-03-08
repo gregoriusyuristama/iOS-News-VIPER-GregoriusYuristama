@@ -152,6 +152,14 @@
 			path = NavigationHelper;
 			sourceTree = "<group>";
 		};
+		B602E2352B9AD42A0005E05C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B6F38C742B98C7730038D165 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		B6F38C5F2B98C7710038D165 = {
 			isa = PBXGroup;
 			children = (
@@ -177,12 +185,10 @@
 		B6F38C6A2B98C7710038D165 /* Mandiri-iOS-News */ = {
 			isa = PBXGroup;
 			children = (
+				B6F38C792B98C7730038D165 /* Info.plist */,
 				B6F38C9B2B98C7BB0038D165 /* Application */,
 				B6F38CA12B98CCBD0038D165 /* Modules */,
 				B6F38C9C2B98CCA00038D165 /* Common */,
-				B6F38C742B98C7730038D165 /* Assets.xcassets */,
-				B6F38C762B98C7730038D165 /* LaunchScreen.storyboard */,
-				B6F38C792B98C7730038D165 /* Info.plist */,
 			);
 			path = "Mandiri-iOS-News";
 			sourceTree = "<group>";
@@ -207,6 +213,7 @@
 		B6F38C9B2B98C7BB0038D165 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				B6F38C762B98C7730038D165 /* LaunchScreen.storyboard */,
 				B6F38C6B2B98C7710038D165 /* AppDelegate.swift */,
 				B6F38C6D2B98C7710038D165 /* SceneDelegate.swift */,
 			);
@@ -216,6 +223,7 @@
 		B6F38C9C2B98CCA00038D165 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B602E2352B9AD42A0005E05C /* Resources */,
 				B6F38CCE2B997F830038D165 /* Constants */,
 				B6F38C9E2B98CCB20038D165 /* Extensions */,
 				B6F38C9D2B98CCAE0038D165 /* Utilities */,
