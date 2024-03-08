@@ -8,10 +8,6 @@
 import Foundation
 import UIKit
 
-protocol NewsWebViewRouterProtocol {
-    static func createModule(with newsArticle: NewsArticleModel) -> UIViewController
-}
-
 class NewsWebViewRouter: NewsWebViewRouterProtocol {
     static func createModule(with newsArticle: NewsArticleModel) -> UIViewController {
         let router = NewsWebViewRouter()

@@ -7,13 +7,6 @@
 
 import UIKit
 
-protocol NewsCategoriesViewProtocol {
-    var presenter: NewsCategoriesPresenterProtocol? { get set }
-    
-    func update(with newsResponse: NewsSourceResponse)
-    func update(with error: Error)
-}
-
 class NewsCategoriesViewController: UIViewController, NewsCategoriesViewProtocol  {
     
     var spinner = UIActivityIndicatorView()

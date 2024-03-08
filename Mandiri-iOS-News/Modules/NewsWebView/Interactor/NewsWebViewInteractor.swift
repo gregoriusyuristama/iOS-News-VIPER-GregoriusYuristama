@@ -7,13 +7,6 @@
 
 import Foundation
 
-protocol NewsWebViewInteractorProtocol {
-    var presenter: NewsWebviewPresenterProtocol? { get set }
-    var newsArticle: NewsArticleModel? { get set }
-    
-    func getNewsArticle()
-}
-
 class NewsWebViewInteractor: NewsWebViewInteractorProtocol {
     var presenter: NewsWebviewPresenterProtocol?
     

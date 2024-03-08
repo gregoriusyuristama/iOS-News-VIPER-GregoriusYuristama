@@ -7,15 +7,7 @@
 
 import Foundation
 
-protocol NewsSourceInteractorInputProtocol {
-    var presenter: NewsSourcesPresenterProtocol? { get set }
-    var newsResponse: NewsSourceResponse? { get set }
-    var category: String? { get set }
-    
-    func getNewsSources()
-}
-
-class NewsSourceInteractor: NewsSourceInteractorInputProtocol {
+class NewsSourceInteractor: NewsSourceInteractorProtocol {
     
     var newsResponse: NewsSourceResponse?
     var category: String?

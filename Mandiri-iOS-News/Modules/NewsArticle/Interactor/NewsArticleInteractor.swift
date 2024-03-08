@@ -7,17 +7,6 @@
 
 import Foundation
 
-protocol NewsArticleInteractorProtocol {
-    var presenter: NewsArticlePresenterProtocol? { get set }
-    var newsSource: NewsSourceModel? { get set }
-    var newsCategory: String? { get set }
-    var manager: NewsArticleManager { get }
-    
-    func getNewsArticles()
-    func loadMoreNewsArticles()
-    
-}
-
 class NewsArticleInteractor: NewsArticleInteractorProtocol {
     
     var presenter: NewsArticlePresenterProtocol?

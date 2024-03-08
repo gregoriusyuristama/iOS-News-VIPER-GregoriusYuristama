@@ -7,19 +7,6 @@
 
 import Foundation
 
-protocol NewsArticlePresenterProtocol {
-    var router: NewsArticleRouterProtocol? { get set }
-    var interactor: NewsArticleInteractorProtocol? { get set }
-    var view: NewsArticleViewProtocol? { get set }
-    
-    func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], Error>)
-    func interactorDidFetchMoreNewsArticle(with result: Result<[NewsArticleModel], Error>)
-    func showNewsWebView(news: NewsArticleModel)
-    
-    func loadMoreData()
-}
-
-
 class NewsArticlePresenter: NewsArticlePresenterProtocol {
     var router: NewsArticleRouterProtocol?
     

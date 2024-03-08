@@ -7,13 +7,6 @@
 
 import Foundation
 
-protocol NewsCategoriesInteractorProtocol {
-    var presenter: NewsCategoriesPresenterProtocol? { get set }
-    
-    
-    func getCategories()
-}
-
 class NewsCategoriesInteractor: NewsCategoriesInteractorProtocol {
     var presenter: NewsCategoriesPresenterProtocol?
     

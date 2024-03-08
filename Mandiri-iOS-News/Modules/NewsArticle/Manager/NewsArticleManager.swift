@@ -7,12 +7,6 @@
 
 import Foundation
 
-protocol NewsArticleManagerProtocol {
-    func getNewsArticles(category: String, sourceId: String, completion: @escaping (NewsArticleResponse?, Error?) -> ())
-    
-    func getMoreNewsArticle(category: String, sourceId: String, pages: Int, completion: @escaping (NewsArticleResponse?, Error?) -> ())
-}
-
 class NewsArticleManager: NewsArticleManagerProtocol {
     
     func getNewsArticles(category: String, sourceId: String, completion: @escaping (NewsArticleResponse?, (any Error)?) -> ()) {

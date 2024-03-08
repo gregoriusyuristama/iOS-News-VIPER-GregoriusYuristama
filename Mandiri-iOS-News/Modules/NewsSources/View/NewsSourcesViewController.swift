@@ -8,14 +8,6 @@
 import UIKit
 import UIScrollView_InfiniteScroll
 
-protocol NewsSourceViewProtocol {
-    var presenter: NewsSourcesPresenterProtocol? { get set }
-    
-    func update(with newsSources: [NewsSourceModel])
-    func update(with error: Error)
-}
-
-
 class NewsSourcesViewController: UIViewController, NewsSourceViewProtocol {
     
     var presenter: NewsSourcesPresenterProtocol?

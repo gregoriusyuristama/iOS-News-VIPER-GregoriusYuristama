@@ -46,8 +46,6 @@ class NewsAPI {
     func getMoreNewsArticleWithCategoryAndSource(with category: String, and sourceId: String, pages: Int, completion: @escaping (Result<NewsArticleResponse, Error>) -> Void) {
         
         let newsSourceURL = "\(APIConstant.baseApiURL)\(APIConstant.getNewsSourceWithCategory)\(category)&sources.id=\(sourceId)&page=\(pages)"
-        
-        print("URL REQUEST]\(newsSourceURL)")
             
         AF.request(newsSourceURL, method: .get, headers: self.newsAPIHeaders).responseDecodable(of: NewsArticleResponse.self) { response in
             switch response.result {

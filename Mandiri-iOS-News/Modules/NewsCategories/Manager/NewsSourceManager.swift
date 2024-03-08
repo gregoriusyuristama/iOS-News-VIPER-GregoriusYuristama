@@ -7,21 +7,13 @@
 
 import Foundation
 
-protocol NewsSourceManagerInputProtocol {
-    func getNewsSources(completion: @escaping (NewsSourceResponse? , Error?) -> ())
-    
-}
-
 class NewsSourceManager: NewsSourceManagerInputProtocol {
     
-    var newsSourceResponse: NewsSourceResponse?
-    
     func getNewsSources(completion: @escaping (NewsSourceResponse? , Error?) -> ()) {
-        NewsAPI.shared.getNewsSources { [weak self] result in
+        NewsAPI.shared.getNewsSources { result in
             switch result {
             case .success(let success):
-                self?.newsSourceResponse = success
-                completion(self?.newsSourceResponse, nil)
+                completion(success, nil)
             case .failure(let failure):
                 completion(nil, failure)
             }

@@ -8,13 +8,6 @@
 import UIKit
 import UIScrollView_InfiniteScroll
 
-protocol NewsArticleViewProtocol {
-    var presenter: NewsArticlePresenterProtocol? { get set }
-    
-    func update(with newsArticles: [NewsArticleModel], isPagination: Bool)
-    func update(with newsArticles: Error)
-}
-
 class NewsArticleViewController: UIViewController, NewsArticleViewProtocol {
     var presenter: NewsArticlePresenterProtocol?
     var spinner = UIActivityIndicatorView()

@@ -8,13 +8,6 @@
 import Foundation
 import UIKit
 
-protocol NewsSourceRouterProtocol {
-    
-    static func createModule(with newsResponse: NewsSourceResponse, and category: String) -> UIViewController
-    
-    func presentNewsArticles(from view: NewsSourceViewProtocol, for source: NewsSourceModel, and category: String)
-}
-
 class NewsSourceRouter: NewsSourceRouterProtocol {
 
     static func createModule(with newsResponse: NewsSourceResponse, and category: String) -> UIViewController {
@@ -22,7 +15,7 @@ class NewsSourceRouter: NewsSourceRouterProtocol {
         
         var view: NewsSourceViewProtocol = NewsSourcesViewController()
         var presenter: NewsSourcesPresenterProtocol = NewsSourcesPresenter()
-        var interactor: NewsSourceInteractorInputProtocol = NewsSourceInteractor()
+        var interactor: NewsSourceInteractorProtocol = NewsSourceInteractor()
         
         view.presenter = presenter
         

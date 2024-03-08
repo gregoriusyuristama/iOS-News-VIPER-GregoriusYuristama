@@ -8,12 +8,6 @@
 import UIKit
 import WebKit
 
-protocol NewsWebViewContollerProtocol {
-    var presenter: NewsWebviewPresenterProtocol? { get set }
-    func update(with newsUrl: URL)
-    func update(with error: Error)
-}
-
 class NewsWebViewContoller: UIViewController, NewsWebViewContollerProtocol, WKUIDelegate, WKNavigationDelegate {
     
     var presenter: NewsWebviewPresenterProtocol?

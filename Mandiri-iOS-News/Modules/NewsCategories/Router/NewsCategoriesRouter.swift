@@ -8,16 +8,6 @@
 import Foundation
 import UIKit
 
-typealias EntryPoint = UINavigationController
-
-protocol NewsCategoriesRouterProtocol {
-    var entry: EntryPoint? { get }
-    
-    static func createModule(usingNavigationFactory factory: NavigationFactory) -> NewsCategoriesRouterProtocol
-    
-    func presentNewsSource(from view: NewsCategoriesViewProtocol, for newsResponse: NewsSourceResponse, category: String)
-}
-
 class NewsCategoriesRouter: NewsCategoriesRouterProtocol {
     var entry: EntryPoint?
     
