@@ -13,8 +13,8 @@ struct NewsSourceResponse: Decodable {
 }
 
 struct NewsSourceModel: Decodable {
-    let id, name, description: String
-    let url: String
-    let category: String
-    let language, country: String
+    let id, name, description: String?
+    let url: String?
+    let category: String?
+    let language, country: String?
 }

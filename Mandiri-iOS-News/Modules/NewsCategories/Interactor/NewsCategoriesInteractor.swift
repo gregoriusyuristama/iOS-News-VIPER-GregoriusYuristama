@@ -33,6 +33,10 @@ class NewsCategoriesInteractor: NewsCategoriesInteractorProtocol {
         let uniqueCategoryId = Set(newsResponse.sources.compactMap({$0.category}))
         return uniqueCategoryId.compactMap { category in
             newsResponse.sources.first(where: {$0.category == category})
-        }.sorted(by: {$0.category < $1.category})
+        }.sorted { newsOne, newsTwo in
+            guard let categoryOne = newsOne.category, let categoryTwo = newsTwo.category else { return false }
+            return categoryOne < categoryTwo
+            
+        }
     }
 }

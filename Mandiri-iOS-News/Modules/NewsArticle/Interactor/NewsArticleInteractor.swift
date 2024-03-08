@@ -22,9 +22,9 @@ class NewsArticleInteractor: NewsArticleInteractorProtocol {
     }
     
     func getNewsArticles() {
-        guard let newsSource = newsSource, let newsCategory = newsCategory else { return }
+        guard let newsSource = newsSource, let newsCategory = newsCategory, let sourceId = newsSource.id else { return }
         
-        manager.getNewsArticles(category: newsCategory, sourceId: newsSource.id) { newsArticleResponse, error in
+        manager.getNewsArticles(category: newsCategory, sourceId: sourceId) { newsArticleResponse, error in
             if let newsArticleResponse = newsArticleResponse{
                 self.presenter?.interactorDidFetchNewsArticles(with: .success(newsArticleResponse.articles), isPagination: false, isPaginationAvailable: ( newsArticleResponse.articles.count < newsArticleResponse.totalResults ))
             } else {
@@ -34,11 +34,11 @@ class NewsArticleInteractor: NewsArticleInteractorProtocol {
     }
     
     func loadMoreNewsArticles() {
-        guard let newsSource = newsSource, let newsCategory = newsCategory, let fetchedNewsArticle = presenter?.fetchedNewsArticle else { return }
+        guard let newsSource = newsSource, let newsCategory = newsCategory, let fetchedNewsArticle = presenter?.fetchedNewsArticle, let sourceId = newsSource.id else { return }
         
         pages += 1
         
-        manager.getNewsArticles(category: newsCategory, sourceId: newsSource.id, pages: self.pages) { newsArticleResponse, error in
+        manager.getNewsArticles(category: newsCategory, sourceId: sourceId, pages: self.pages) { newsArticleResponse, error in
             if let newsArticleResponse = newsArticleResponse {
                 self.presenter?.interactorDidFetchNewsArticles(with: .success(newsArticleResponse.articles), isPagination: true, isPaginationAvailable: ( fetchedNewsArticle.count < newsArticleResponse.totalResults ))
             } else {

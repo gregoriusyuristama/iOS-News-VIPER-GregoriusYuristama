@@ -30,7 +30,9 @@ class NewsArticleRouter: NewsArticleRouterProtocol {
         
         guard let viewController = view as? UIViewController else { fatalError("Invalid View Protocol Type") }
         
-        viewController.navigationItem.title = source.name.capitalized
+        if let sourceName = source.name {
+            viewController.navigationItem.title = sourceName.capitalized
+        }
         
         return viewController
     }

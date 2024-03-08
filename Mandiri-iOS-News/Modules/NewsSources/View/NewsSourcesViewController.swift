@@ -109,7 +109,8 @@ extension NewsSourcesViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "newsSourceCell", for: indexPath)
-        cell.textLabel?.text = newsSources[indexPath.row].name.capitalized
+        guard let newsName = newsSources[indexPath.row].name else { return UITableViewCell() }
+        cell.textLabel?.text = newsName.capitalized
         cell.textLabel?.textColor = .black
         return cell
     }

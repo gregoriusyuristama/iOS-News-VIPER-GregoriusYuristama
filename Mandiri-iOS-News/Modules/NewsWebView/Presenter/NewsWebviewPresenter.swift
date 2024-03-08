@@ -20,7 +20,7 @@ class NewsWebviewPresenter: NewsWebviewPresenterProtocol {
     var view:  NewsWebViewContollerProtocol?
     
     func interactorDidGetNewsURL(with result: NewsArticleModel) {
-        if let newsUrl = URL(string: result.url) {
+        if let newsUrl = URL(string: result.url ?? "") {
             view?.update(with: newsUrl)
         } else {
             view?.update(with: URLError(.cannotFindHost))

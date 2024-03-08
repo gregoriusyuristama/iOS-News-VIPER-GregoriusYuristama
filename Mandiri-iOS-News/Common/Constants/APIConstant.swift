@@ -11,5 +11,5 @@ class APIConstant {
     static let baseApiURL = "https://newsapi.org/v2/"
     static let getNewsSourceWithCategory = "top-headlines?category="
     static let getNewsCategoriesURL = "top-headlines/sources"
-    static let apiKey = "e9ebac667eea4d7596eb92551716b0f7"
+    static let apiKey = "6dd4d32af79046bf9f28185febb7bcde"
 }

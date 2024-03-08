@@ -8,7 +8,6 @@
 import Foundation
 
 
-// MARK: - Welcome10
 struct NewsArticleResponse: Codable {
     let status: String
     let totalResults: Int
@@ -19,9 +18,9 @@ struct NewsArticleResponse: Codable {
 struct NewsArticleModel: Codable {
     let source: NewsArticleSource
     let author: String?
-    let title: String
+    let title: String?
     let description: String?
-    let url: String
+    let url: String?
     let urlToImage: String?
 //    let publishedAt: Date
     let content: String?
@@ -30,5 +29,5 @@ struct NewsArticleModel: Codable {
 // MARK: - Source
 struct NewsArticleSource: Codable {
     let id: String?
-    let name: String
+    let name: String?
 }

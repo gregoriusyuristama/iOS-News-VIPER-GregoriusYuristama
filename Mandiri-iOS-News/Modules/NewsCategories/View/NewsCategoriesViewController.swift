@@ -81,13 +81,15 @@ extension NewsCategoriesViewController: UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = categories[indexPath.row].category.capitalized
+        guard let category = categories[indexPath.row].category else { return UITableViewCell() }
+        cell.textLabel?.text = category.capitalized
         cell.textLabel?.textColor = .black
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter?.showNewsSource(category: categories[indexPath.row].category)
+        guard let category = categories[indexPath.row].category else { return  }
+        presenter?.showNewsSource(category: category)
     }
 }
 

@@ -40,7 +40,10 @@ class NewsSourcesPresenter: NewsSourcesPresenterProtocol {
     
     func searchNews(_ searchText: String) {
         if !searchText.isEmpty {
-            guard let searchedNews = fetchedNewsSource?.filter( {$0.name.localizedCaseInsensitiveContains(searchText)}) else { return }
+            guard let searchedNews = fetchedNewsSource?.filter( { news in
+                guard let name = news.name else { return false }
+                return name.localizedCaseInsensitiveContains(searchText)
+            }) else { return }
             view?.update(with: searchedNews, isPagination: false)
         } else {
             guard let fetchedNewsSource = fetchedNewsSource else { return }
