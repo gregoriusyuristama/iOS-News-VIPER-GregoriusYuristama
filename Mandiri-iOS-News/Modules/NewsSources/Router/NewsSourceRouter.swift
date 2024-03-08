@@ -22,7 +22,7 @@ class NewsSourceRouter: NewsSourceRouterProtocol {
         
         var view: NewsSourceViewProtocol = NewsSourcesViewController()
         var presenter: NewsSourcesPresenterProtocol = NewsSourcesPresenter()
-        var interactor: NewsSourceInteractorInputProtocol = NewsSourceInteractor(manager: NewsSourceManager.shared)
+        var interactor: NewsSourceInteractorInputProtocol = NewsSourceInteractor()
         
         view.presenter = presenter
         

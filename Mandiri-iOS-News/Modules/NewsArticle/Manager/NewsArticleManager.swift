@@ -9,11 +9,11 @@ import Foundation
 
 protocol NewsArticleManagerProtocol {
     func getNewsArticles(category: String, sourceId: String, completion: @escaping (NewsArticleResponse?, Error?) -> ())
+    
+    func getMoreNewsArticle(category: String, sourceId: String, pages: Int, completion: @escaping (NewsArticleResponse?, Error?) -> ())
 }
 
 class NewsArticleManager: NewsArticleManagerProtocol {
-    
-    static var shared = NewsArticleManager()
     
     func getNewsArticles(category: String, sourceId: String, completion: @escaping (NewsArticleResponse?, (any Error)?) -> ()) {
         NewsAPI.shared.getNewsArticleWithCategoryAndSource(with: category, and: sourceId) { result in
@@ -26,5 +26,15 @@ class NewsArticleManager: NewsArticleManagerProtocol {
         }
     }
     
+    func getMoreNewsArticle(category: String, sourceId: String, pages: Int, completion: @escaping (NewsArticleResponse?, (any Error)?) -> ()) {
+        NewsAPI.shared.getMoreNewsArticleWithCategoryAndSource(with: category, and: sourceId, pages: pages) { result in
+            switch result {
+            case .success(let success):
+                completion(success, nil)
+            case .failure(let failure):
+                completion(nil, failure)
+            }
+        }
+    }
     
 }

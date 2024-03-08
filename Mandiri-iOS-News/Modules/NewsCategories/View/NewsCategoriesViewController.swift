@@ -45,6 +45,7 @@ class NewsCategoriesViewController: UIViewController, NewsCategoriesViewProtocol
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.startAnimating()
         view.addSubview(spinner)
+        view.addSubview(label)
 
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
@@ -53,34 +54,36 @@ class NewsCategoriesViewController: UIViewController, NewsCategoriesViewProtocol
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+        label.frame = view.bounds
+        label.center = view.center
     }
     
     
 
     func update(with newsResponse: NewsSourceResponse) {
-        
-        DispatchQueue.main.async {
-            self.newsResponse = newsResponse
+        DispatchQueue.main.async { [weak self] in
+            self?.newsResponse = newsResponse
             let uniqueCategoryId = Set(newsResponse.sources.compactMap({$0.category}))
             let uniqueCategories = uniqueCategoryId.compactMap { category in
                 newsResponse.sources.first(where: {$0.category == category})
             }.sorted(by: {$0.category < $1.category})
-            self.categories = uniqueCategories
-            self.tableView.reloadData()
-            self.tableView.isHidden = false
-            self.spinner.stopAnimating()
+            self?.categories = uniqueCategories
+            self?.tableView.reloadData()
+            self?.tableView.isHidden = false
+            self?.spinner.stopAnimating()
         }
     }
     
     func update(with error: any Error) {
-        DispatchQueue.main.async {
-            self.categories = []
-            self.tableView.isHidden = true
-            self.label.text = error.localizedDescription
-            self.label.isHidden = false
-            self.spinner.stopAnimating()
+        DispatchQueue.main.async { [weak self] in
+            self?.categories = []
+            self?.tableView.isHidden = true
+            self?.label.text = error.localizedDescription
+            self?.label.isHidden = false
+            self?.spinner.stopAnimating()
         }
     }
+    
 }
 
 extension NewsCategoriesViewController: UITableViewDataSource, UITableViewDelegate {

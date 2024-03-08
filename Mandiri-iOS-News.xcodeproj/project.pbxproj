@@ -144,6 +144,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B602E1ED2B9AB3920005E05C /* NavigationHelper */ = {
+			isa = PBXGroup;
+			children = (
+				B6F38CC02B9971B80038D165 /* NavigationBuilder.swift */,
+			);
+			path = NavigationHelper;
+			sourceTree = "<group>";
+		};
 		B6F38C5F2B98C7710038D165 = {
 			isa = PBXGroup;
 			children = (
@@ -218,8 +226,8 @@
 		B6F38C9D2B98CCAE0038D165 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				B602E1ED2B9AB3920005E05C /* NavigationHelper */,
 				B6F38C9F2B98CCB50038D165 /* API */,
-				B6F38CC02B9971B80038D165 /* NavigationBuilder.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";

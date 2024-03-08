@@ -26,7 +26,8 @@ class NewsCategoriesRouter: NewsCategoriesRouterProtocol {
         
         var view: NewsCategoriesViewProtocol = NewsCategoriesViewController()
         var presenter: NewsCategoriesPresenterProtocol = NewsCategoriesPresenter()
-        var interactor: NewsCategoriesInteractorProtocol = NewsCategoriesInteractor(manager: NewsSourceManager.shared)
+        let newsSourceManager = NewsSourceManager()
+        var interactor: NewsCategoriesInteractorProtocol = NewsCategoriesInteractor(manager: newsSourceManager)
         
         view.presenter = presenter
         

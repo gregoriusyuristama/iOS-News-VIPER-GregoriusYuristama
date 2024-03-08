@@ -19,7 +19,8 @@ class NewsArticleRouter: NewsArticleRouterProtocol {
         
         var view: NewsArticleViewProtocol = NewsArticleViewController()
         var presenter: NewsArticlePresenterProtocol = NewsArticlePresenter()
-        var interactor: NewsArticleInteractorProtocol = NewsArticleInteractor(manager: NewsArticleManager.shared)
+        let newsArticleManager = NewsArticleManager()
+        var interactor: NewsArticleInteractorProtocol = NewsArticleInteractor(manager: newsArticleManager)
         
         view.presenter = presenter
         

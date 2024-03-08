@@ -14,8 +14,6 @@ protocol NewsSourceManagerInputProtocol {
 
 class NewsSourceManager: NewsSourceManagerInputProtocol {
     
-    static var shared = NewsSourceManager()
-    
     var newsSourceResponse: NewsSourceResponse?
     
     func getNewsSources(completion: @escaping (NewsSourceResponse? , Error?) -> ()) {

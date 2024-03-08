@@ -22,12 +22,6 @@ class NewsSourceInteractor: NewsSourceInteractorInputProtocol {
     
     var presenter: (any NewsSourcesPresenterProtocol)?
     
-    var manager: NewsSourceManager
-    
-    init( manager: NewsSourceManager) {
-        self.manager = manager
-    }
-    
     func getNewsSources() {
         guard let newsResponse else { return }
         self.presenter?.interactorDidFetchNewsSources(with: .success(newsResponse.sources.filter({$0.category == category})))

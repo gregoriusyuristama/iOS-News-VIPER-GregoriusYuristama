@@ -13,12 +13,14 @@ protocol NewsArticlePresenterProtocol {
     var view: NewsArticleViewProtocol? { get set }
     
     func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], Error>)
+    func interactorDidFetchMoreNewsArticle(with result: Result<[NewsArticleModel], Error>)
     func showNewsWebView(news: NewsArticleModel)
     
+    func loadMoreData()
 }
 
-class NewsArticlePresenter: NewsArticlePresenterProtocol {
 
+class NewsArticlePresenter: NewsArticlePresenterProtocol {
     var router: NewsArticleRouterProtocol?
     
     var interactor: NewsArticleInteractorProtocol? {
@@ -32,7 +34,16 @@ class NewsArticlePresenter: NewsArticlePresenterProtocol {
     func interactorDidFetchNewsArticles(with result: Result<[NewsArticleModel], any Error>) {
         switch result {
         case .success(let response):
-            view?.update(with: response)
+            view?.update(with: response, isPagination: false)
+        case .failure(let failure):
+            view?.update(with: failure)
+        }
+    }
+    
+    func interactorDidFetchMoreNewsArticle(with result: Result<[NewsArticleModel], any Error>) {
+        switch result {
+        case .success(let success):
+            view?.update(with: success, isPagination: true)
         case .failure(let failure):
             view?.update(with: failure)
         }
@@ -44,5 +55,7 @@ class NewsArticlePresenter: NewsArticlePresenterProtocol {
         router?.presentNewsArticleWebView(from: view, for: news)
     }
     
-    
+    func loadMoreData() {
+        interactor?.loadMoreNewsArticles()
+    }
 }

@@ -9,6 +9,5 @@ target 'Mandiri-iOS-News' do
 
   pod 'SDWebImage'
   pod 'Alamofire'
-  pod 'SnapKit'
-
+  pod 'UIScrollView-InfiniteScroll', '~> 1.3.0'
 end
